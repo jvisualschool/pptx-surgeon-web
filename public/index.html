@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPTX Surgeon - Web Interface</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Language Toggle Button - Fixed Position -->
+    <div class="language-toggle" id="languageToggle">
+        <span id="languageText">한</span>
+    </div>
+    
+    <!-- Theme Toggle Button - Fixed Position -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon" id="themeIcon"></i>
+    </div>
+    
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="header-images">
+                    <img src="img/img1.svg" alt="Medical Icon 1" class="header-img active">
+                    <img src="img/img2.svg" alt="Medical Icon 2" class="header-img">
+                    <img src="img/img3.svg" alt="Medical Icon 3" class="header-img">
+                    <img src="img/img4.svg" alt="Medical Icon 4" class="header-img">
+                    <img src="img/img5.svg" alt="Medical Icon 5" class="header-img">
+                    <img src="img/img6.svg" alt="Medical Icon 6" class="header-img">
+                    <img src="img/img7.svg" alt="Medical Icon 7" class="header-img">
+                    <img src="img/img8.svg" alt="Medical Icon 8" class="header-img">
+                    <img src="img/img9.svg" alt="Medical Icon 9" class="header-img">
+                    <img src="img/img10.svg" alt="Medical Icon 10" class="header-img">
+                    <img src="img/img11.svg" alt="Medical Icon 11" class="header-img">
+                    <img src="img/img12.svg" alt="Medical Icon 12" class="header-img">
+                    <img src="img/img13.svg" alt="Medical Icon 13" class="header-img">
+                </div>
+                <div class="header-text">
+                    <h1>PPTX Surgeon</h1>
+                    <p>PowerPoint 폰트 문제를 해결하는 전문 도구</p>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Step 1: File Upload -->
+            <div class="step-card active" id="step1">
+                <div class="step-header">
+                    <span class="step-number">1</span>
+                    <h2>PPTX 파일 선택</h2>
+                </div>
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>PPTX 파일을 드래그하거나 클릭하여 선택하세요</p>
+                    <input type="file" id="fileInput" accept=".pptx" hidden>
+                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                        파일 선택
+                    </button>
+                </div>
+                <div class="file-info" id="fileInfo" style="display: none;">
+                    <i class="fas fa-file-powerpoint"></i>
+                    <span id="fileName"></span>
+                    <button class="btn btn-secondary btn-sm" id="removeFileBtn">제거</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Analysis -->
+            <div class="step-card" id="step2">
+                <div class="step-header">
+                    <span class="step-number">2</span>
+                    <h2>폰트 분석</h2>
+                </div>
+                <div class="analysis-content">
+                    <button class="btn btn-primary" id="analyzeBtn">
+                        <i class="fas fa-search"></i> 폰트 분석 시작
+                    </button>
+                    <div class="analysis-result" id="analysisResult"></div>
+                </div>
+            </div>
+
+            <!-- Step 3: Options -->
+            <div class="step-card" id="step3">
+                <div class="step-header">
+                    <span class="step-number">3</span>
+                    <h2>수술 옵션 선택</h2>
+                </div>
+                <div class="options-content">
+                    <div class="option-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="removeEmbed">
+                            <span class="checkmark"></span>
+                            폰트 임베딩 제거
+                            <small>깨진 폰트 임베딩 정보를 완전히 제거합니다</small>
+                        </label>
+                    </div>
+
+                    <div class="option-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="enableMapping">
+                            <span class="checkmark"></span>
+                            폰트 이름 매핑
+                            <small>특정 폰트를 다른 폰트로 교체합니다</small>
+                        </label>
+                        <div class="font-mappings" id="fontMappings" style="display: none;">
+                            <div class="mapping-item">
+                                <select class="mapping-from">
+                                    <option value="">기존 폰트 선택</option>
+                                </select>
+                                <i class="fas fa-arrow-right"></i>
+                                <select class="mapping-to">
+                                    <option value="">새 폰트 선택</option>
+                                </select>
+                                <button class="btn btn-danger btn-sm" onclick="removeMappingItem(this)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            <button class="btn btn-secondary btn-sm" onclick="addMappingItem()">
+                                <i class="fas fa-plus"></i> 매핑 추가
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="option-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="enableCleanup">
+                            <span class="checkmark"></span>
+                            올인원 폰트 정리
+                            <small>지정된 폰트들만 유지하고 나머지는 기본 폰트로 매핑</small>
+                        </label>
+                        <div class="cleanup-options" id="cleanupOptions" style="display: none;">
+                            <div class="font-list" id="fontList">
+                                <!-- 폰트 체크박스들이 동적으로 추가됩니다 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="option-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="verbose">
+                            <span class="checkmark"></span>
+                            상세 로그 출력
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Process -->
+            <div class="step-card" id="step4">
+                <div class="step-header">
+                    <span class="step-number">4</span>
+                    <h2>폰트 수술 실행</h2>
+                </div>
+                <div class="process-content">
+                    <div class="process-button-container">
+                        <button class="btn btn-success btn-large" id="processBtn">
+                            <i class="fas fa-play"></i> 수술 시작
+                        </button>
+                    </div>
+                    
+                    <div class="progress-container" id="progressContainer" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-text" id="progressText">준비 중...</div>
+                        <div class="verbose-log" id="verboseLog" style="display: none;">
+                            <h4>상세 로그:</h4>
+                            <div class="log-content" id="logContent"></div>
+                        </div>
+                    </div>
+
+                    <div class="result-container" id="resultContainer" style="display: none;">
+                        <div class="success-message">
+                            <i class="fas fa-check-circle"></i>
+                            <h3>수술 완료!</h3>
+                            <p>폰트 문제가 성공적으로 해결되었습니다.</p>
+                            <button class="btn btn-primary" id="downloadBtn">
+                                <i class="fas fa-download"></i> 결과 파일 다운로드
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Status Messages -->
+        <div class="toast-container" id="toastContainer"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
